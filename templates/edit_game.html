@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Game</title>
+</head>
+<body>
+    <h1>Edit Game</h1>
+    <form action="/edit/{{ game[0] }}" method="POST">
+        <input type="text" name="name" value="{{ game[1] }}" required>
+        <!-- Add additional input fields for other game attributes -->
+        <input type="submit" value="Save Changes">
+    </form>
+</body>
+</html>
