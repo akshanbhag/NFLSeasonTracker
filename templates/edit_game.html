@@ -5,10 +5,36 @@
 </head>
 <body>
     <h1>Edit Game</h1>
-    <form action="/edit/{{ game[0] }}" method="POST">
-        <input type="text" name="name" value="{{ game[1] }}" required>
-        <!-- Add additional input fields for other game attributes -->
-        <input type="submit" value="Save Changes">
+    <form method="post" action="/edit_game/{{ game[0] }}">
+        <label for="home_team">Home Team:</label>
+        <select name="home_team" id="home_team">
+            {% for team in teams %}
+                <option value="{{ team[0] }}" {% if team[0] == game[1] %}selected{% endif %}>{{ team[1] }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="away_team">Away Team:</label>
+        <select name="away_team" id="away_team">
+            {% for team in teams %}
+                <option value="{{ team[0] }}" {% if team[0] == game[2] %}selected{% endif %}>{{ team[1] }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="winner">Winner:</label>
+        <select name="winner" id="winner">
+            <option value="">No Winner</option>
+            {% for team in teams %}
+                <option value="{{ team[0] }}" {% if team[0] == game[3] %}selected{% endif %}>{{ team[1] }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="date">Date:</label>
+        <input type="text" name="date" id="date" value="{{ game[4] }}"><br>
+
+        <label for="week_number">Week Number:</label>
+        <input type="text" name="week_number" id="week_number" value="{{ game[5] }}"><br>
+
+        <input type="submit" value="Update Game">
     </form>
 </body>
 </html>

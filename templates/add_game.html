@@ -4,13 +4,37 @@
     <title>Add Game</title>
 </head>
 <body>
-    <h1>Add Game</h1>
-    <form action="/add" method="POST">
-        <label for="name">Game Name:</label>
-        <input type="text" name="name" id="name" required>
-        <!-- Add additional input fields for other game attributes -->
+    <h1>Add New Game</h1>
+    <form method="post" action="/add_game">
+        <label for="home_team">Home Team:</label>
+        <select name="home_team" id="home_team">
+            {% for team in teams %}
+            <option value="{{ team[0] }}">{{ team[1] }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="away_team">Away Team:</label>
+        <select name="away_team" id="away_team">
+            {% for team in teams %}
+            <option value="{{ team[0] }}">{{ team[1] }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="winner">Winner:</label>
+        <select name="winner" id="winner">
+            <option value="">No Winner</option>
+            {% for team in teams %}
+            <option value="{{ team[0] }}">{{ team[1] }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label for="date">Date:</label>
+        <input type="text" name="date" id="date"><br>
+
+        <label for="week_number">Week Number:</label>
+        <input type="text" name="week_number" id="week_number"><br>
+
         <input type="submit" value="Add Game">
     </form>
-    <a href="/">Back to Games</a>
 </body>
 </html>
