@@ -1,90 +1,82 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for, flash
 import sqlite3
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'
+
+# SQLite Database Configuration
+DATABASE = 'NFLSeasonTracker.db'
+
+def get_db():
+    db = getattr(app, '_database', None)
+    if db is None:
+        db = app._database = sqlite3.connect(DATABASE)
+    return db
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(app, '_database', None)
+    if db is not None:
+        db.close()
+
+# Routes
 
 @app.route('/')
-def display_data():
-    conn = sqlite3.connect('NFLSeasonTracker.db')
-    cursor = conn.cursor()
-
-    # Fetch data from the database
-    cursor.execute('SELECT * FROM Teams')
-    data = cursor.fetchall()
-
-    conn.close()
-
-    return render_template('index.html', data=data)
-
-def display_games():
-    conn = sqlite3.connect('your_database.db')
-    cursor = conn.cursor()
-
-    cursor.execute('SELECT * FROM Games')
-    games = cursor.fetchall()
-
-    conn.close()
-
-    return render_template('display_games.html', games=games, teams=get_teams())
+def index():
+    con = get_db()
+    cur = con.cursor()
+    cur.execute("SELECT * FROM Games")
+    games = cur.fetchall()
+    con.close()
+    return render_template('index.html', games=games)
 
 @app.route('/add_game', methods=['POST'])
 def add_game():
     if request.method == 'POST':
-        home_team_id = request.form['home_team']
-        away_team_id = request.form['away_team']
-        winner_id = request.form['winner']
-        date = request.form['date']
+        home_team = request.form['home_team']
+        away_team = request.form['away_team']
+        winner = request.form['winner']
+        date_played = request.form['date_played']
         week_number = request.form['week_number']
+        
+        con = get_db()
+        cur = con.cursor()
+        cur.execute("INSERT INTO Games (home_team, away_team, winner, date_played, week_number) VALUES (?, ?, ?, ?, ?)",
+                    (home_team, away_team, winner, date_played, week_number))
+        con.commit()
+        con.close()
+        flash('Game added successfully', 'success')
+        return redirect(url_for('index'))
 
-        conn = sqlite3.connect('your_database.db')
-        cursor = conn.cursor()
-
-        cursor.execute('INSERT INTO Games (home_team_id, away_team_id, winner_id, date, week_number) VALUES (?, ?, ?, ?, ?)',
-                       (home_team_id, away_team_id, winner_id, date, week_number))
-
-        conn.commit()
-        conn.close()
-
-    return redirect(url_for('display_games'))
-
-@app.route('/edit_game/<int:id>', methods=['GET', 'POST'])
-def edit_game(id):
-    conn = sqlite3.connect('your_database.db')
-    cursor = conn.cursor()
-
+@app.route('/edit_game/<int:game_id>', methods=['POST'])
+def edit_game(game_id):
     if request.method == 'POST':
-        home_team_id = request.form['home_team']
-        away_team_id = request.form['away_team']
-        winner_id = request.form['winner']
-        date = request.form['date']
+        home_team = request.form['home_team']
+        away_team = request.form['away_team']
+        winner = request.form['winner']
+        date_played = request.form['date_played']
         week_number = request.form['week_number']
+        # Extract form data and update the selected game
+        con = get_db()
+        cur = con.cursor()
+        # Update the game using SQL UPDATE statement
+        cur.execute("UPDATE Games SET home_team=?, away_team=?, winner=?, date_played=?, week_number=? WHERE game_id=?",
+                    (home_team, away_team, winner, date_played, week_number, game_id))
+        con.commit()
+        con.close()
+        flash('Game updated successfully', 'success')
+        return redirect(url_for('index'))
 
-        cursor.execute('UPDATE Games SET home_team_id=?, away_team_id=?, winner_id=?, date=?, week_number=? WHERE id=?',
-                       (home_team_id, away_team_id, winner_id, date, week_number, id))
-
-        conn.commit()
-        conn.close()
-
-        return redirect(url_for('display_games'))
-
-    cursor.execute('SELECT * FROM Games WHERE id = ?', (id,))
-    game = cursor.fetchone()
-
-    conn.close()
-
-    return render_template('edit_game.html', game=game, teams=get_teams())
-
-@app.route('/delete_game/<int:id>')
-def delete_game(id):
-    conn = sqlite3.connect('your_database.db')
-    cursor = conn.cursor()
-
-    cursor.execute('DELETE FROM Games WHERE id = ?', (id,))
-
-    conn.commit()
-    conn.close()
-
-    return redirect(url_for('display_games'))
+@app.route('/delete_game/<int:game_id>', methods=['POST'])
+def delete_game(game_id):
+    if request.method == 'POST':
+        con = get_db()
+        cur = con.cursor()
+        cur.execute("DELETE FROM Games WHERE game_id=?", (game_id,))
+        con.commit()
+        con.close()
+        flash('Game deleted successfully', 'success')
+        return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)

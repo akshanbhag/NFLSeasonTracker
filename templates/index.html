@@ -1,23 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Display Teams</title>
+    <title>NFL Season Tracker</title>
 </head>
 <body>
-    <h1>Data from SQLite Database</h1>
+    <h1>NFL Season Tracker</h1>
+    <h2>Games</h2>
     <table>
         <tr>
-            <th>ID</th>
-            <th>Division</th>
-            <th>Team_Name</th>
+            <th>Game ID</th>
+            <th>Home Team</th>
+            <th>Away Team</th>
+            <th>Winner</th>
+            <th>Date Played</th>
+            <th>Week Number</th>
+            <th>Actions</th>
         </tr>
-        {% for row in data %}
+        {% for game in games %}
         <tr>
-            <td>{{ row[0] }}</td>
-            <td>{{ row[1] }}</td>
-            <td>{{ row[2] }}</td>
+            <td>{{ game[0] }}</td>
+            <td>{{ game[1] }}</td>
+            <td>{{ game[2] }}</td>
+            <td>{{ game[3] }}</td>
+            <td>{{ game[4] }}</td>
+            <td>{{ game[5] }}</td>
+            <td>
+                <form action="/edit_game/{{ game[0] }}" method="POST">
+                    <button type="submit">Edit</button>
+                </form>
+                <form action="/delete_game/{{ game[0] }}" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </table>
+    <h2>Add Game</h2>
+    <form action="/add_game" method="POST">
+        <label for="home_team">Home Team:</label>
+        <input type="text" name="home_team" required><br>
+        <label for="away_team">Away Team:</label>
+        <input type="text" name="away_team" required><br>
+        <label for="winner">Winner:</label>
+        <input type="text" name="winner"><br>
+        <label for="date_played">Date Played:</label>
+        <input type="date" name="date_played" required><br>
+        <label for="week_number">Week Number:</label>
+        <input type="number" name="week_number" required><br>
+        <button type="submit">Add Game</button>
+    </form>
+    <h2>Edit Game</h2>
+    <form action="/edit_game/{{ game_to_edit[0] }}" method="POST">
+        <label for="home_team">Home Team:</label>
+        <input type="text" name="home_team" value="{{ game_to_edit[1] }}" required><br>
+        <label for="away_team">Away Team:</label>
+        <input type="text" name="away_team" value="{{ game_to_edit[2] }}" required><br>
+        <label for="winner">Winner:</label>
+        <input type="text" name="winner" value="{{ game_to_edit[3] }}"><br>
+        <label for="date_played">Date Played:</label>
+        <input type="date" name="date_played" value="{{ game_to_edit[4] }}" required><br>
+        <label for="week_number">Week Number:</label>
+        <input type="number" name="week_number" value="{{ game_to_edit[5] }}" required><br>
+        <button type="submit">Update Game</button>
+    </form>
+    <h2>Delete Game</h2>
+    <form action="/delete_game/{{ game_to_delete[0] }}" method="POST">
+        <p>Are you sure you want to delete the following game?</p>
+        <p>Game ID: {{ game_to_delete[0] }}</p>
+        <p>Home Team: {{ game_to_delete[1] }}</p>
+        <p>Away Team: {{ game_to_delete[2] }}</p>
+        <p>Winner: {{ game_to_delete[3] }}</p>
+        <p>Date Played: {{ game_to_delete[4] }}</p>
+        <p>Week Number: {{ game_to_delete[5] }}</p>
+        <button type="submit">Delete Game</button>
+    </form>
 </body>
 </html>
