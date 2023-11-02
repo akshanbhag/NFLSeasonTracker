@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
+    #points to inner urls.py
     path('admin/', admin.site.urls),
     path('seasontracker/', include('nflseason.urls')),
 ]
