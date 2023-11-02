@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report Interface</title>
+</head>
+<body>
+    <h1>Generate a Report</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <label for="year">Select Year:</label>
+        <select name="year" id="year">
+            <option value="" selected>Any</option>
+            {% for y in years %}
+                <option value="{{ y }}">{{ y }}</option>
+            {% endfor %}
+        </select>
+        
+        <label for="week">Select Week:</label>
+        <select name="week" id="week">
+            <option value="" selected>Any</option>
+            {% for w in weeks %}
+                <option value="{{ w }}">{{ w }}</option>
+            {% endfor %}
+        </select>
+        
+        <input type="submit" value="Generate Report">
+    </form>
+
+    <h2>Report Results</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Game ID</th>
+                <th>Home Team</th>
+                <th>Away Team</th>
+                <th>Winner</th>
+                <th>Date Played</th>
+                <th>Week Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for game in games %}
+                <tr>
+                    <td>{{ game.game_id }}</td>
+                    <td>{{ game.home_team }}</td>
+                    <td>{{ game.away_team }}</td>
+                    <td>{{ game.winner }}</td>
+                    <td>{{ game.date_played }}</td>
+                    <td>{{ game.week_number }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

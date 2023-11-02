@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Games Interface</title>
+</head>
+<body>
+    <h1>Manage Games</h1>
+    <h1>Add a New Game</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Add Game">
+    </form>
+
+    <h2>Edit Game</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Save">
+    </form>
+
+    <h2>Games List</h2>
+    <table>
+        <tr>
+            <th>Game ID</th>
+            <th>Home Team</th>
+            <th>Away Team</th>
+            <th>Winner</th>
+            <th>Date Played</th>
+            <th>Week Number</th>
+            <th>Actions</th>
+        </tr>
+        {% for game in games %}
+            <tr>
+                <td>{{ game.game_id }}</td>
+                <td>{{ game.home_team }}</td>
+                <td>{{ game.away_team }}</td>
+                <td>{{ game.winner }}</td>
+                <td>{{ game.date_played }}</td>
+                <td>{{ game.week_number }}</td>
+                <td>
+                    <form method="post" class="edit-game-form">
+                        {% csrf_token %}
+                        {{ form.as_table }}
+                        <input type="hidden" name="game_id" value="{{ game.game_id }}">
+                        <input type="submit" value="Edit">
+                    </form> |
+                    <form method="post" action="{% url 'delete_game' game.game_id %}">
+                        {% csrf_token %}
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
