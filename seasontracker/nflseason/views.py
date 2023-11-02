@@ -11,7 +11,7 @@ def home(request):
     return render(request, 'home.html', {'home': home})
 
 def games_interface(request):
-    #handles add
+    #handles add and edit
     if request.method == 'POST':
         if 'game_id' in request.POST:
             # Handle editing a game
