@@ -5,7 +5,7 @@ from .models import Games
 from .forms import GamesForm
 
 def home(request):
-    # Your view logic here
+    # home page
     home = "Welcome to the NFL Season Tracker"
     
     return render(request, 'home.html', {'home': home})
