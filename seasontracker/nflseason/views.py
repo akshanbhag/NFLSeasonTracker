@@ -14,7 +14,6 @@ def games_interface(request):
     #handles add and edit
     if request.method == 'POST':
         if 'game_id' in request.POST:
-            # Handle editing a game
             game_id = request.POST['game_id']
             game = Games.objects.get(game_id=game_id)
             form = GamesForm(request.POST, instance=game)
