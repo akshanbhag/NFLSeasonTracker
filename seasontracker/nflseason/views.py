@@ -55,11 +55,11 @@ def report_interface(request):
         week_number = request.POST.get('week_number')
         
         if year:
-            # Filter games by year
+            # Year filter
             games = Games.objects.filter(date_played__year=year)
             
             if week_number:
-                # Filter further by week number
+                # week number filter
                 games = games.filter(week_number=week_number)
         else:
             games = Games.objects.all()
