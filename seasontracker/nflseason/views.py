@@ -30,20 +30,6 @@ def games_interface(request):
     
     return render(request, 'games_interface.html', {'form': form, 'games': games})
 
-def edit_game(request, temp_game_id):
-    game = get_object_or_404(Games, game_id=temp_game_id)
-    if request.method == 'POST':
-        form = GamesForm(request.POST, instance=game)
-        if form.is_valid():
-            form.save()
-            return redirect('games_interface')
-    else:
-        form = GamesForm(instance=game)
-    
-    games = Games.objects.all()
-    
-    return render(request, 'games_interface.html', {'form': form, 'games': games})
-
 def delete_game(request, game_id):
     game = Games.objects.get(game_id=game_id)
     game.delete()
