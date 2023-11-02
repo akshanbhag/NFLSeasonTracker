@@ -20,7 +20,6 @@ def games_interface(request):
             if form.is_valid():
                 form.save()
         else:
-            # Handle adding a new game
             form = GamesForm(request.POST)
             if form.is_valid():
                 form.save()
