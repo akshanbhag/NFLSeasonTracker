@@ -31,6 +31,7 @@ def games_interface(request):
     return render(request, 'games_interface.html', {'form': form, 'games': games})
 
 def delete_game(request, game_id):
+    #handles delete game button
     game = Games.objects.get(game_id=game_id)
     game.delete()
     return HttpResponseRedirect(reverse('games_interface'))
