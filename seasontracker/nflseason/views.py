@@ -36,7 +36,8 @@ def delete_game(request, game_id):
     game.delete()
     return HttpResponseRedirect(reverse('games_interface'))
 
-def report_interface(request):    
+def report_interface(request):
+    #accesses report interface    
     if request.method == 'POST':
         year = request.POST.get('year')
         week_number = request.POST.get('week_number')
