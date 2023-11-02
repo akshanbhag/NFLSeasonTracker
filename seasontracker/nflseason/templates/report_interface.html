@@ -9,22 +9,12 @@
     <form method="post">
         {% csrf_token %}
         
-        <label for="year">Select Year:</label>
-        <select name="year" id="year">
-            <option value="" selected>Any</option>
-            {% for y in years %}
-                <option value="{{ y }}">{{ y }}</option>
-            {% endfor %}
-        </select>
-        
-        <label for="week">Select Week:</label>
-        <select name="week" id="week">
-            <option value="" selected>Any</option>
-            {% for w in weeks %}
-                <option value="{{ w }}">{{ w }}</option>
-            {% endfor %}
-        </select>
-        
+        <label for="year">Year:</label>
+        <input type="number" name="year" id="year" min="1920" max="2023" required>
+        <br>
+        <label for="week_number">Week Number:</label>
+        <input type="number" name="week_number" id="week_number" min="1" max="23" required>
+        <br>
         <input type="submit" value="Generate Report">
     </form>
 
