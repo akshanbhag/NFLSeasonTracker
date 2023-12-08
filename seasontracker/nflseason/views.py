@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from .models import Games
+from .models import Games, Teams
 from .forms import GamesForm
 
 def home(request):
@@ -55,3 +55,7 @@ def report_interface(request):
     else:
         games = Games.objects.all()
         return render(request, 'report_interface.html', {'games': games})
+
+def teams_page(request):
+    teams = Teams.objects.all()
+    return render(request, 'teams_page.html', {'teams': teams})
