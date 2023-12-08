@@ -14,6 +14,10 @@ class Teams(models.Model):
     team_id = models.AutoField(primary_key=True)
     division = models.CharField(max_length=50)
     team_name = models.CharField(max_length=100)
+    class Meta:
+        indexes = [
+            models.Index(fields=['team_id'])
+        ]
 
 #Players table
 class Players(models.Model):
